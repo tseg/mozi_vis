@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Force Layout Example 1</title>
+    <style>	
+planar-view {
+    height: 100%;
+    width: 100%;
+    float: left;
+}
+
+svg {
+    background-color: #f2f2f2;
+    border: solid #b4b4b4 1px;
+    margin: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+.node circle, polygon {
+    stroke: #424242;
+    stroke-opacity: .6;
+    fill: #29a;
+    stroke-width: 1px;
+}
+
+.node text {
+    font-family: Arial, serif;
+}
+
+.node:hover circle {
+    stroke-opacity: .9;
+    fill: #28b6ca;
+    stroke-width: 2px;
+}
+
+.node:hover text {
+    font-weight: bold;
+}
+
+.node_selected circle {
+    stroke-opacity: .9;
+    fill: #fcbe28;
+    stroke-width: 1px;
+}
+
+.node_selected text {
+    font-weight: bold;
+}
+
+.node_selected:hover circle {
+    stroke-opacity: 1;
+    fill: #fcdb1f;
+    stroke-width: 2px;
+}
+
+.node_selected:hover text {
+    font-weight: bold;
+}
+
+.link{
+    stroke: #424242;
+    fill: none;
+	stroke-width: 2px;
+}
+
+.edge .text_path {
+    visibility: hidden;
+}
+
+.edge text {
+    text-anchor: middle;
+    font-family: Arial, serif;
+}
+	
+	
+	
+	
+	</style>
+</head>
+<body>
+
+	<script src='libs/d3.v3.min.js'></script>
+	<script src='js/utils.js'></script>
+	<script src='js/visualizeit.js'></script>
+	<script src='js/chain.js'></script>
+	<script src='js/closure.js'></script>
+	
+    <script>
+		var force, svg, svg_g, nodes, edges, atoms, atoms2Graph;
+		var w = 640, h = 480;
+		
+		var graph = {
+			"nodes":[{"x":208.0000,"y":273.000},
+					{"x":590.0000,"y":56.000},
+					{"x":319.000,"y":279.000}
+			],
+			"links":[{"target":1, "source":0},
+					{"target":2, "source":0}
+			]
+		};
+		console.log("brfore call back");
+		/*
+		var force, svg, svg_g, nodes, edges, atoms, atoms2Graph;
+		var w = 640,
+			h = 480;
+		
+		svg = d3.select('body')
+				.append('svg')
+				.attr('width', w)
+				.attr('height', h);
+		
+		nodes = graph.nodes, 
+		edges = graph.links;
+		
+		force = d3.layout.force()
+					.size([w, h])
+					.nodes(nodes)
+					.links(edges);
+		 
+		force.linkDistance(w/3.05) //define the link distance which distance (normally in pixels) that we'd like to have between nodes that are connected.(It is, thus, the length we'd like our links to have.)
+			.charge(-300)
+			.on("tick", tick)
+			.start();
+			
+		var edge = svg.selectAll('.link')
+					.data(edges)
+					.enter()
+					.append('g')
+					.append('line')
+					.attr('class', 'link');
+					
+		var node = svg.selectAll('.node')
+					.data(nodes)
+					.enter()
+					.append('g')
+					.attr('class', 'node')
+					.on("mouseover", mouseover)
+					.on("mouseout", mouseout);
+		
+		//append circle to node object and setting the radius 
+		node.append('circle')
+			.attr('r', w/100);
+		
+		//appending text to the node
+		node.append("text")
+			.attr("x", 12)
+			.attr("dy", "-4")
+			.attr("startOffset", "50%")
+			.text("blabla");
+			 
+		node.call(force.drag); //making the node drag-able 
+		
+		function tick(){
+			edge.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
+		
+			node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		}
+		*/
+		function mouseover(){
+			d3.select(this).select("circle").transition()
+				.duration(750)
+				.attr('r', 12);
+			console.log(this);
+		}
+		
+		function mouseout(){
+			d3.select(this).select("circle").transition()
+				.duration(750)
+				.attr('r', w/100);
+			console.log(this);
+		}
+		
+		console.log(car.attr('wheel'));
+		car.attr('wheel', 8).attr('color', "red");
+		console.log(car.attr('color'));
+		
+		
+		var sum = outer(100);
+		console.log(sum);
+		console.log(sum(50));
+		
+	</script>
+</body>
+</html>
