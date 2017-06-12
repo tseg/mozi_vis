@@ -7,7 +7,7 @@ var Forced = function(opts){
 	//forced layout charge value
 	this.charge = -300;
 	
-	//define the height and width
+	// Define the dimensions of the visualization (height and width_
 	this.width = opts.width;
 	this.height = opts.height;
 	
@@ -52,7 +52,14 @@ Forced.prototype.draw = function(){
 	var zoom = d3.behavior.zoom()
 				.scaleExtent([1, 10])
 				.on("zoom", zoomed);
-		
+	
+	// Create a force layout object and define its properties.
+	// Those include the charge, dimensions of the visualization and 
+	// When layout function executes, the force layout
+    // calculations have been updated. The layout will
+    // have set various properties in nodes and
+    // links objects that we can use to position them
+    // within the SVG container.
 	var	force = d3.layout.force()
 				.charge(this.charge)
 				.linkDistance(this.width/3.05)  //define the link distance between nodes that are connected.
@@ -64,13 +71,14 @@ Forced.prototype.draw = function(){
 				.on("dragstart", dragstarted)
 				.on("drag", dragged)
 				.on("dragend", dragended);
-					
+	
+	// Creating an SVG container to hold the visualization. We specify the dimensions for this container 
+	// We append "g" (Grouping - To group a set of SVG elements that share the same attribute)
 	var svg = d3.select(this.element)
 				.append('svg')
 				.attr('width', this.width)// + margin.left + margin.right)
 				.attr('height', this.height)// + margin.top + margin.bottom)
 				.append("g")
-				//.attr("transform", "translate(" + margin.left + "," + margin.right + ")")
 				.call(zoom);
 
 	var rect = svg.append("rect")
@@ -115,7 +123,8 @@ Forced.prototype.draw = function(){
 				.attr('id', function(d, i){return "link" + i; })// make sure the link has a unique id for it to get referenced from the link label textPath
 				.attr("marker-start", function(d){ return (d.arrow == "<")? "url(#start-arrow)" : "";})
 				.attr("marker-end", function(d){ return (d.arrow == ">") ? "url(#end-arrow)" : "";});
-				
+	
+	//This section associate each like with text and set some text parameters
 	var linkLable = svg.selectAll('.link-label')
 						.data(edges) //associate the like label with data
 						.enter()
@@ -140,7 +149,8 @@ Forced.prototype.draw = function(){
 			.append('circle')
 			.attr('r', 12);
 		
-		//appending text to the node
+		//This section associate each node with text and set some text parameters
+		//It also shorten text if the text is to long (> 10 characters)
 		node.append("text")
 			.attr("x", 16)
 			.attr("dy", "-4")
@@ -151,8 +161,14 @@ Forced.prototype.draw = function(){
 		//on mouse hover events 
 		node.on("mouseover", mouseover)
             .on("mouseout", mouseout);
-			
+		
+		// The layout function will set various properties in our nodes and
+		// links objects that we can use to position them within the SVG container.
 		function tick(){
+			// This update positions of the links.
+			// For those elements, the force layout sets the
+			// `source` and `target` properties, draw a line using 
+			// M = moveto and L = lineto commands in each case.
 			edge.attr('d', function (d) {
 				 return (d.source.x < d.target.x)
 					? 'M' + d.source.x + ',' + d.source.y
@@ -160,7 +176,13 @@ Forced.prototype.draw = function(){
 					: 'M' + d.target.x + ',' + d.target.y
 					+ 'L' + d.source.x + ',' + d.source.y;
 				});
-		  
+			
+			// This part of the code reposition the nodes. As the force
+			// layout runs it updates the `x` and `y` properties
+			// that define where the node should be centered.
+			// To move the node, we set the appropriate SVG attributes to their new values.
+			// The SVG Transform Attribute applies a list of transformations to an element and it's children.
+			// This transform specifies a translation by x and y.
 			node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 		}
 		
@@ -200,7 +222,7 @@ Forced.prototype.draw = function(){
 		}
 
 }
-//setting new data to the view
+//function definition setting new data to the view
 Forced.prototype.setData = function(newData) {
     this.nodes = newData.nodes;
     this.edges = newData.links;
